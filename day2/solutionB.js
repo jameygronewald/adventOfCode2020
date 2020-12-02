@@ -7,20 +7,18 @@ const policyArray = policyData.split('\n');
 const policyObjectArray = policyArray.map(policy => {
   const singlePolicyArray = policy.split(' ');
 
-  let [numParams, charParams, password] = singlePolicyArray;
+  const [numParams, charParams, password] = singlePolicyArray;
 
   const numParamsList = numParams.split('-');
 
   const char = charParams.slice(0, 1);
 
-  let policyObject = {
+  return {
     firstIndex: numParamsList[0] - 1,
     secondIndex: numParamsList[1] - 1,
     char,
     password,
   };
-
-  return policyObject;
 });
 
 const tallyValidPasswords = passwordPolicyArray => {
