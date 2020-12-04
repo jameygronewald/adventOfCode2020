@@ -37,7 +37,7 @@ const traverseSlope = (position, addToY, addToX) => {
   let { y, x } = position;
   y += addToY;
   x += addToX;
-  if (x > 30) x -= 31;
+  if (x > arrayOfSlopes[0].length - 1) x -= arrayOfSlopes[0].length;
   currentPosition.y = y;
   currentPosition.x = x;
 };
