@@ -2,23 +2,9 @@ const fs = require('fs');
 
 const passportData = fs.readFileSync('input.txt', 'utf-8');
 
-const validateByr = year => {
-  if (year.length !== 4) return false;
-  if (1920 > parseInt(year) || parseInt(year) > 2002) return false;
-
-  return true;
-};
-
-const validateIyr = year => {
-  if (year.length !== 4) return false;
-  if (2010 > parseInt(year) || parseInt(year) > 2020) return false;
-
-  return true;
-};
-
-const validateEyr = year => {
-  if (year.length !== 4) return false;
-  if (2020 > parseInt(year) || parseInt(year) > 2030) return false;
+const validateYear = (year1, year2, yearToTest) => {
+  if (yearToTest.length !== 4) return false;
+  if (year1 > parseInt(yearToTest) || parseInt(yearToTest) > year2) return false;
 
   return true;
 };
@@ -104,7 +90,6 @@ const tallyValidPassports = passportArray => {
 };
 
 const checkValidity = passport => {
-
   const keys = Object.keys(passport);
 
   if (keys.length === 7 && keys.includes('cid')) {
@@ -124,11 +109,11 @@ const checkValidity = passport => {
 const mapRuleToObject = (key, object) => {
   switch (key) {
     case 'byr':
-      return validateByr(object[key]);
+      return validateYear(1920, 2002, object[key]);
     case 'iyr':
-      return validateIyr(object[key]);
+      return validateYear(2010, 2020, object[key]);
     case 'eyr':
-      return validateEyr(object[key]);
+      return validateYear(2020, 2030, object[key]);
     case 'hgt':
       return validateHgt(object[key]);
     case 'hcl':
