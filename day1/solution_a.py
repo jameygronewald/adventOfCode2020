@@ -1,6 +1,6 @@
 def create_list_from_expense_report():
     expense_list = []
-    with open(f"input.txt") as f:
+    with open(f"day1/input.txt") as f:
         line = f.readline()
         while line:
             expense_list.append(int(line))

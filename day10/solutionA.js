@@ -12,4 +12,4 @@ for (let i = 0; i < sorted.length - 1; i++) {
   else threes++;
 }
 
-console.log(ones, threes, ones * threes);
+console.log(ones * threes);
