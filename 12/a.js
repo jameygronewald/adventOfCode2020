@@ -2,69 +2,55 @@ const fs = require("fs");
 
 const directions = fs.readFileSync("input.txt", "utf-8").split("\n");
 
-const coords = { northSouth: 0, eastWest: 0 };
+const coords = { northSouth: 0, eastWest: 0, direction: "E" };
 
-const waypoint = { northSouth: 1, eastWest: 10 };
+const cardinals = { N: 1, E: 2, S: 3, W: 4 };
+const cardKeys = Object.keys(cardinals);
 
 const followDirections = (directionsArray) => {
   directionsArray.forEach((dir) => {
     let shift = dir.slice(0, 1);
+    if (shift === "F") shift = coords.direction;
     const amount = parseInt(dir.slice(1));
-
-    if (shift === "F") moveShip(amount);
-    
-    else if (shift === "L" || shift === "R") reorientWaypoint(shift, amount);
-    
-    else shiftWaypoint(shift, amount);
+    createAction(shift, amount);
   });
 };
 
-const moveShip = (moves) => {
-  const northSouthMove = waypoint.northSouth * moves;
-  const eastWestMove = waypoint.eastWest * moves;
-  coords.northSouth += northSouthMove;
-  coords.eastWest += eastWestMove;
-};
-
-const reorientWaypoint = (shift, amount) => {
-  let { northSouth, eastWest } = waypoint;
-  const fullDirection = shift + amount;
-  switch (fullDirection) {
-    case "L90":
-    case "R270":
-      northSouth = -northSouth;
-      waypoint.northSouth = eastWest;
-      waypoint.eastWest = northSouth;
-      break;
-
-    case "L180":
-    case "R180":
-      waypoint.northSouth = -northSouth;
-      waypoint.eastWest = -eastWest;
-      break;
-
-    case "L270":
-    case "R90":
-      eastWest = -eastWest;
-      waypoint.northSouth = eastWest;
-      waypoint.eastWest = northSouth;
-      break;
-  }
-};
-
-const shiftWaypoint = (shift, amount) => {
+const createAction = (shift, amount) => {
   switch (shift) {
+    case "L":
+      let shiftLeft = cardinals[coords.direction];
+      const leftTurns = amount / 90;
+      shiftLeft -= leftTurns;
+      if (shiftLeft < 1) shiftLeft += 4;
+      for (let key of cardKeys) {
+        if (cardinals[key] === shiftLeft) {
+          coords.direction = key;
+        }
+      }
+      break;
+    case "R":
+      let shiftRight = cardinals[coords.direction];
+      const rightTurns = amount / 90;
+      shiftRight += rightTurns;
+      if (shiftRight > 4) shiftRight -= 4;
+      for (let key of cardKeys) {
+        if (cardinals[key] === shiftRight) {
+          coords.direction = key;
+        }
+      }
+      break;
     case "N":
-      waypoint.northSouth += amount;
+      coords.northSouth += amount;
       break;
     case "S":
-      waypoint.northSouth -= amount;
+      coords.northSouth -= amount;
       break;
     case "E":
-      waypoint.eastWest += amount;
+      coords.eastWest += amount;
       break;
     case "W":
-      waypoint.eastWest -= amount;
+      coords.eastWest -= amount;
       break;
     default:
       return;
@@ -74,4 +60,4 @@ const shiftWaypoint = (shift, amount) => {
 followDirections(directions);
 
 console.log(coords);
-console.log(Math.abs(coords.northSouth) + Math.abs(coords.eastWest)); // 52866
+console.log(Math.abs(coords.northSouth) + Math.abs(coords.eastWest));
