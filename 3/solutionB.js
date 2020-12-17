@@ -43,12 +43,9 @@ const traverseSlope = (position, addToY, addToX) => {
 };
 
 const checkForTree = position => {
-  if (position === '#') {
-    numberOfTrees++;
-  }
+  if (position === '#') numberOfTrees++;
 };
 
 arrayOfRoutes.forEach(route => getAllTrees(route));
 
-console.log(treeArray.reduce((trees, num) => trees * num, 1));
-
+console.log(treeArray.reduce((trees, num) => trees * num, 1));  // 7812180000
