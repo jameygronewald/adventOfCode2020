@@ -19,26 +19,8 @@ const followDirections = (directionsArray) => {
 const createAction = (shift, amount) => {
   switch (shift) {
     case "L":
-      let shiftLeft = cardinals[coords.direction];
-      const leftTurns = amount / 90;
-      shiftLeft -= leftTurns;
-      if (shiftLeft < 1) shiftLeft += 4;
-      for (let key of cardKeys) {
-        if (cardinals[key] === shiftLeft) {
-          coords.direction = key;
-        }
-      }
-      break;
     case "R":
-      let shiftRight = cardinals[coords.direction];
-      const rightTurns = amount / 90;
-      shiftRight += rightTurns;
-      if (shiftRight > 4) shiftRight -= 4;
-      for (let key of cardKeys) {
-        if (cardinals[key] === shiftRight) {
-          coords.direction = key;
-        }
-      }
+      makeTurn(shift, amount);
       break;
     case "N":
       coords.northSouth += amount;
@@ -54,6 +36,25 @@ const createAction = (shift, amount) => {
       break;
     default:
       return;
+  }
+};
+
+const makeTurn = (leftOrRight, degrees) => {
+  let currDirection = cardinals[coords.direction];
+  const numOfTurns = degrees / 90;
+
+  currDirection =
+    leftOrRight === "R"
+      ? (currDirection += numOfTurns)
+      : (currDirection -= numOfTurns);
+
+  if (currDirection > 4) currDirection %= 4;
+  else if (currDirection < 1) currDirection += 4;
+
+  for (let key of cardKeys) {
+    if (cardinals[key] === currDirection) {
+      coords.direction = key;
+    }
   }
 };
 
